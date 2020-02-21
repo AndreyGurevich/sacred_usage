@@ -1,7 +1,11 @@
 from numpy.random import permutation
 from sklearn import svm, datasets
 from sacred import Experiment
+from sacred.observers import MongoObserver
 ex = Experiment('iris_rbf_svm')
+observer = MongoObserver(
+    url='mongodb://user:pass@host/omniboard?authMechanism=SCRAM-SHA-256',
+    db_name='omniboard')
 
 @ex.config
 def cfg():
@@ -17,5 +21,6 @@ def run(C, gamma):
   clf = svm.SVC(C, 'rbf', gamma=gamma)
   clf.fit(iris.data[:90],
           iris.target[:90])
+  ex.log_scalar("Some metric", 0.85)
   return clf.score(iris.data[90:],
                    iris.target[90:])
