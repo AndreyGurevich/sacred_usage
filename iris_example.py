@@ -11,9 +11,9 @@ def cfg():
 @ex.automain
 def run(C, gamma):
   iris = datasets.load_iris()
-  per = permutation(iris.target.size)
-  iris.data = iris.data[per]
-  iris.target = iris.target[per]
+  perm = permutation(iris.target.size)
+  iris.data = iris.data[perm]
+  iris.target = iris.target[perm]
   clf = svm.SVC(C, 'rbf', gamma=gamma)
   clf.fit(iris.data[:90],
           iris.target[:90])
