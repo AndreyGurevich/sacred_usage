@@ -2,10 +2,14 @@ from numpy.random import permutation
 from sklearn import svm, datasets
 from sacred import Experiment
 from sacred.observers import MongoObserver
-ex = Experiment('iris_rbf_svm')
+from sacred.utils import apply_backspaces_and_linefeeds
+
 observer = MongoObserver(
     url='mongodb://user:pass@host/omniboard?authMechanism=SCRAM-SHA-256',
     db_name='omniboard')
+ex = Experiment('iris_rbf_svm')
+ex.observers.append(observer)
+ex.captured_out_filter = apply_backspaces_and_linefeeds
 
 @ex.config
 def cfg():
@@ -22,5 +26,5 @@ def run(C, gamma):
   clf.fit(iris.data[:90],
           iris.target[:90])
   ex.log_scalar("Some metric", 0.85)
-  return clf.score(iris.data[90:],
-                   iris.target[90:])
+  return float(clf.score(iris.data[90:],
+                         iris.target[90:]))
