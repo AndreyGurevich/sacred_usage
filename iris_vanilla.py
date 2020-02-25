@@ -1,14 +1,8 @@
 from numpy.random import permutation
 from sklearn import svm, datasets
 
-
-
-
-
 C = 1.0
 gamma = 0.7
-
-
 
 iris = datasets.load_iris()
 perm = permutation(iris.target.size)
